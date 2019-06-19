@@ -399,7 +399,7 @@ class Event:
                     
         return alliances
 
-    def getDistrictPoints(self , teamNumber , rookieYear = None, includePlayoffs = True):
+    def getTeamDistrictPoints(self , teamNumber , rookieYear = None, includePlayoffs = True):
         code = teamNumber
         if type(teamNumber) == int:
             code = "frc"+str(teamNumber)
