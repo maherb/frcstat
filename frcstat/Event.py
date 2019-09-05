@@ -44,6 +44,7 @@ class Event:
         self.lookup = None
 
         self.qualMatchAmount = None
+        self.teamElimWins = None
 
         self.validityFile = code + "-valid"
 
@@ -506,10 +507,10 @@ class Event:
             self.teamElimWins = {}
         eventData = self.getEventData()
         year = eventData["year"]
-        argTeamCode = 'frc{}'.format(teamNumber)
+        argTeamCode = 'frc{}'.format(teamNumber) if "frc" not in str(teamNumber) else teamNumber
         if argTeamCode in self.teamElimWins:
             return self.teamElimWins[argTeamCode]
-        for teamCode in self.teamList:
+        for teamCode in self.getTeamList():
             teamMatches = self.getTeamMatches(teamCode)
             wins = 0
             for matchKey in teamMatches.keys():
@@ -781,7 +782,7 @@ class Event:
             modFunc = self.getTeamKey
 
         rankings = self.getRankings()
-        if rankings:
+        if rankings and rankings['rankings']:
             if len(rankings['rankings']) > 0:
                 return [modFunc(team['team_key'][3:]) for team in rankings['rankings']]
         matchData = self.getMatchData()
@@ -805,7 +806,7 @@ class Event:
             return team
         return "frc" + team
 
-    def getAwards(self):
+    def getTeamAwards(self):
         """
             Returns a dictionary mapping from teamKey to a set of awards won at that event, i.e. for 2018nyut, 
             awards['frc2791'] = set([1, 16]), for winner and industrial design
